@@ -1,0 +1,25 @@
+---
+- name: Install dependencies
+  ansible.builtin.dnf:
+    name:
+      - podman
+    update_cache: true
+    state: present
+  become: true
+
+- name: Ensure podman group exists
+  ansible.builtin.group:
+    name: podman
+    state: present
+  become: true
+
+- name: Add user to podman group
+  ansible.builtin.user:
+    name: "{{ ansible_user }}"
+    groups: podman
+    append: true
+  become: true
+  notify: Reset_ssh_connection_handler
+
+- name: Run handlers
+  ansible.builtin.meta: flush_handlers

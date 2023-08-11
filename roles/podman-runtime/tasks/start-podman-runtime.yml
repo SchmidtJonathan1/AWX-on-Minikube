@@ -1,0 +1,8 @@
+---
+- name: Start podman daemon and enable on boot
+  ansible.builtin.systemd:
+    name: podman
+    state: started
+    daemon_reload: true
+    enabled: true
+  become: true

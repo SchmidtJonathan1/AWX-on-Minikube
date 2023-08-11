@@ -11,6 +11,7 @@
   vars:
     exposed_node_port: 30080
   roles:
-    - docker-runtime
+    - podman-runtime
+    # - docker-runtime
     - minikube-cluster
     - awx-operator

@@ -2,8 +2,20 @@
 
 - name: Install Python package manager
   ansible.builtin.apt:
-    name: python3-pip
+    name:
+      - python3-pip
+      - git
     state: present
+  when: ansible_os_family == "Debian"
+  become: true
+
+- name: Install Python package manager
+  ansible.builtin.dnf:
+    name:
+      - python3-pip
+      - git
+    state: present
+  when: ansible_os_family == "RedHat"
   become: true
 
 - name: Install Python dependencies for Ansible modules

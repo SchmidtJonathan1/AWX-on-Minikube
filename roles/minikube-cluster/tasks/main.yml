@@ -1,5 +1,12 @@
 ---
-- ansible.builtin.import_tasks: install-minikube.yml # noqa name[missing]
+- ansible.builtin.import_tasks: install-deb-minikube.yml # noqa name[missing]
+  when: ansible_os_family == "Debian"
+  tags:
+    - install
+    - minikube
+
+- ansible.builtin.import_tasks: install-rpm-minikube.yml # noqa name[missing]
+  when: ansible_os_family == "RedHat"
   tags:
     - install
     - minikube
