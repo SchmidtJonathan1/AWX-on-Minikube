@@ -28,9 +28,11 @@ pip3 install -r requirements.yml
 Adjust the inventory.  
 The playbook needs *sudo* permissions, either set an appropriate user or use the `bootstrap.yml` playbook which prepares the managed node.  
 
-Run the playbook and provide a user which can access the managed node and has root permissions, a dedicated *ansible* user with sudo permissions is created and all packages are updated to latest state.
+Run the playbook and provide a user which can access the managed node and has root permissions, a dedicated *ansible* user with sudo permissions is created and all packages are updated to latest state. Default configuration method is remote, but you can set it up local as well. Use extra vars method=local instead of method=remote
 ```bash
 ansible-playbook bootstrap.yml -e ansible_user=<default-user> --ask-pass --ask-become-pass
+# For local installation use 
+ansible-playbook bootstrap.yml ' --connection local -e method=local --ask-become-pass'
 ```
 
 ## Usage
