@@ -1,5 +1,4 @@
 ---
-
 - name: Deploy AWX instance
   kubernetes.core.k8s:
     namespace: "{{ awx_namespace }}"
@@ -36,12 +35,29 @@
       app.kubernetes.io/name: "{{ awx_instance_name }}-web"
     state: present
 
+- name: Set SELinux
+  when: ansible_os_family == "RedHat"
+  become: true
+  block:
+    - name: Add semanage rule for httpd {{ exposed_node_port }}
+      community.general.seport:
+        ports: "{{ exposed_node_port }}"
+        proto: tcp
+        setype: http_port_t
+        state: present
+
+    - name: Set httpd_can_network_connect flag on and keep it persistent across reboots
+      ansible.posix.seboolean:
+        name: httpd_can_network_connect
+        state: true
+        persistent: true
+
 - name: Wait for availability of AWX UI (timeout set to 2 minutes)
   ansible.builtin.uri:
     url: http://{{ ansible_default_ipv4.address }}:{{ exposed_node_port }}
   register: awx_ui_availability
   until: awx_ui_availability.status == 200
-  retries: 12
+  retries: 50
   delay: 10
 
 - name: Get AWX admin secret

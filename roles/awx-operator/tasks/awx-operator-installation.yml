@@ -1,5 +1,4 @@
 ---
-
 - name: Get AWX operator releases
   ansible.builtin.uri:
     url: https://api.github.com/repos/ansible/awx-operator/releases

@@ -1,5 +1,4 @@
 ---
-
 - name: Delete minikube cluster
   ansible.builtin.command:
     cmd: minikube delete --purge=true

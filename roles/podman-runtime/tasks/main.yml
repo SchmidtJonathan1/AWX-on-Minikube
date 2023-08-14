@@ -1,3 +1,6 @@
 ---
-- ansible.builtin.import_tasks: podman-installation.yml # noqa name[missing]
-- ansible.builtin.import_tasks: start-podman-runtime.yml # noqa name[missing]
+- name: Podman install is true
+  when: install_container == "podman"
+  block:
+    - ansible.builtin.import_tasks: podman-installation.yml # noqa name[missing]
+    - ansible.builtin.import_tasks: start-podman-runtime.yml # noqa name[missing]

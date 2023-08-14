@@ -1,5 +1,4 @@
 ---
-
 - ansible.builtin.import_tasks: prerequisites.yml  # noqa name[missing]
   tags:
     - prepare

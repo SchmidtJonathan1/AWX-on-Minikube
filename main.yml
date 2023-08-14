@@ -10,8 +10,9 @@
   hosts: target
   vars:
     exposed_node_port: 30080
+    install_container: "podman" # or "docker"
   roles:
     - podman-runtime
-    # - docker-runtime
+    - docker-runtime
     - minikube-cluster
     - awx-operator

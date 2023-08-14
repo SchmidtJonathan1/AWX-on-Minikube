@@ -1,8 +1,9 @@
 ---
 # Bootstraps a VM (remote or local) with an Ansible user, copies the key of the current user and upgrades all packages
 # Default configuration method is remote
+# For local installation use ' --connection local -e method=local --ask-become-pass'
 
-- name: Bootstrap playbook, run it with '-e "ansible_user=<default-user> method=<run-method remote/local>" --ask-pass --ask-become-pass'
+- name: Bootstrap playbook, run it with '-e ansible_user=<default-user> --ask-pass --ask-become-pass'
   hosts: all
   vars:
     automation_user: ansible
