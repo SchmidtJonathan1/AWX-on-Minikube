@@ -6,49 +6,24 @@
   changed_when: false
   failed_when: false
 
-- name: Minikube with podman
-  when: install_container == "podman"
-  block:
-    - name: Start minikube driver podman  # noqa no-changed-when
-      ansible.builtin.command:
-        cmd: minikube start --driver=podman {{ minikube_additional_start_parameter }}
-      async: 600
-      poll: 0
-      register: minikube_start
-      when: minikube_status.rc != 0
+- name: Start minikube driver {{ container_runtime }}  # noqa no-changed-when
+  ansible.builtin.command:
+    cmd: minikube start --driver={{ container_runtime }} {{ minikube_additional_start_parameter }}
+  async: 600
+  poll: 0
+  register: minikube_start
+  when: minikube_status.rc != 0
 
-    - name: Wait for fully started minikube instance (timeout set to 10 minutes) # noqa args[module]
-      ansible.builtin.async_status:
-        jid: '{{ minikube_start.ansible_job_id }}'
-      register: job_result
-      until: job_result.finished
-      retries: 60
-      delay: 10
-      when:
-        - minikube_start is defined
-        - minikube_start.ansible_job_id is defined
-
-- name: Minikube with docker
-  when: install_container == "docker"
-  block:
-    - name: Start minikube driver docker # noqa no-changed-when
-      ansible.builtin.command:
-        cmd: minikube start --driver=docker {{ minikube_additional_start_parameter }}
-      async: 600
-      poll: 0
-      register: minikube_start
-      when: minikube_status.rc != 0 and install_container == "docker"
-
-    - name: Wait for fully started minikube instance (timeout set to 10 minutes) # noqa args[module]
-      ansible.builtin.async_status:
-        jid: '{{ minikube_start.ansible_job_id }}'
-      register: job_result
-      until: job_result.finished
-      retries: 60
-      delay: 10
-      when:
-        - minikube_start is defined
-        - minikube_start.ansible_job_id is defined
+- name: Wait for fully started minikube instance (timeout set to 10 minutes) # noqa args[module]
+  ansible.builtin.async_status:
+    jid: '{{ minikube_start.ansible_job_id }}'
+  register: job_result
+  until: job_result.finished
+  retries: 60
+  delay: 10
+  when:
+    - minikube_start is defined
+    - minikube_start.ansible_job_id is defined
 
 - name: Ensure minikube instance is running
   ansible.builtin.command:

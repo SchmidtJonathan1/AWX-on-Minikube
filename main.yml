@@ -10,9 +10,22 @@
   hosts: target
   vars:
     exposed_node_port: 30080
-    install_container: "podman" # or "docker"
+    container_runtime: "podman" # or "docker"
+  pre_tasks:
+    - name: Ensure required variables are set
+      ansible.builtin.assert:
+        that:
+          - exposed_node_port is defined
+          - exposed_node_port | type_debug == "int"
+          - container_runtime is defined
+          - container_runtime | type_debug == "AnsibleUnicode"
+          - container_runtime == "podman" or container_runtime == "docker"
+        quiet: true
+        fail_msg: Required variables are not defined or have invalid values!
   roles:
-    - podman-runtime
-    - docker-runtime
+    - name: podman-runtime
+      when: container_runtime == "podman"
+    - name: docker-runtime
+      when: container_runtime == "docker"
     - minikube-cluster
     - awx-operator

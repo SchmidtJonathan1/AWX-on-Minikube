@@ -12,6 +12,7 @@
       ansible.builtin.command:
         cmd: ansible-galaxy collection list --format json
       changed_when: false
+      check_mode: false
       register: installed_collections_output
 
     - name: Ensure required collection are installed

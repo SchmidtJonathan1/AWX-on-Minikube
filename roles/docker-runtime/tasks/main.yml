@@ -1,6 +1,4 @@
 ---
-- name: Docker install is true
-  when: install_container == "docker"
-  block:
-    - ansible.builtin.import_tasks: docker-installation.yml # noqa name[missing]
-    - ansible.builtin.import_tasks: start-docker-runtime.yml # noqa name[missing]
+
+- ansible.builtin.import_tasks: docker-installation.yml # noqa name[missing]
+- ansible.builtin.import_tasks: start-docker-runtime.yml # noqa name[missing]

@@ -12,6 +12,7 @@
       ansible.builtin.command:
         cmd: pip3 list --format json
       changed_when: false
+      check_mode: false
       register: pip3_list_output
 
     - name: Ensure required Python packages are installed
